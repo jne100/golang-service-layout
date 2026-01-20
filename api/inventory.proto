@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package inventory.v1;
+option go_package = "github.com/jne100/golang-service-layout/api";
+
+import "google/protobuf/timestamp.proto";
+
+service InventoryService {
+  rpc CreateItem(CreateItemRequest) returns (CreateItemResponse);
+  rpc GetItem(GetItemRequest) returns (GetItemResponse);
+}
+
+message Item {
+  string sku = 1;
+  string name = 2;
+  int32 quantity = 3;
+  google.protobuf.Timestamp created_at = 4;
+}
+
+message CreateItemRequest {
+  Item item = 1;
+}
+
+message CreateItemResponse {
+}
+
+message GetItemRequest {
+  string sku = 1;
+}
+
+message GetItemResponse {
+  Item item = 1;
+}

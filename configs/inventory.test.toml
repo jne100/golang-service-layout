@@ -1,0 +1,13 @@
+[inbound]
+grpc_port = 50051
+
+[logging]
+verbosity = "debug"
+
+[db]
+driver = "sqlite3"
+dsn = ":memory:"
+
+[cron]
+timezone = "Europe/Amsterdam"
+print_stats = "0 * * * *"  # runs every hour

@@ -35,8 +35,43 @@ build:
 	@go test -run=none ./... >/dev/null
 
 test:
-	PATH=$$PATH:$(shell go env GOPATH)/bin gotest ./...
+	go test ./...
 
 clean:
 	go clean ./...
 	rm -rf bin/
+
+images:
+	docker build -f deployments/Dockerfile -t inventory:latest .
+
+examine:
+	docker run --rm -it --entrypoint /bin/bash inventory
+
+up:
+	docker run -d \
+		--name inventory-prod \
+		--restart unless-stopped \
+		-e CONFIG_PATH=/app/configs/inventory.prod.toml \
+		-p 50051:50051 \
+		inventory
+
+down:
+	docker stop inventory-prod
+	docker rm inventory-prod
+
+deploy:
+	$(MAKE) images
+	$(MAKE) down
+	$(MAKE) up
+
+restart:
+	docker restart inventory-prod
+
+ps:
+	@docker ps --filter "name=inventory-prod"
+
+ssh:
+	@docker exec -it inventory-prod /bin/sh
+
+logs:
+	@docker logs -f inventory-prod

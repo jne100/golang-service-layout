@@ -10,6 +10,7 @@ var Module = fx.Options(
 )
 
 func NewConfig() (InventoryConfig, error) {
+	viper.AutomaticEnv()
 	viper.SetConfigFile(viper.GetString("CONFIG_PATH"))
 
 	if err := viper.ReadInConfig(); err != nil {

@@ -2,7 +2,7 @@ FROM golang:1.24-alpine AS build
 
 WORKDIR /app
 
-RUN apk add --no-cache git ca-certificates make
+RUN apk add --no-cache git ca-certificates make gcc musl-dev
 
 COPY go.mod go.sum ./
 COPY api/go.mod api/go.sum ./api/
@@ -13,9 +13,13 @@ COPY . .
 RUN make build
 RUN make test
 
-FROM gcr.io/distroless/base-debian12 AS runtime
+FROM alpine:3.19 AS runtime
 
 WORKDIR /app
+
+RUN apk add --no-cache tzdata
+RUN addgroup -S nonroot
+RUN adduser -S nonroot -G nonroot
 
 COPY --from=build /app/bin/inventory /app/inventory
 COPY configs /app/configs

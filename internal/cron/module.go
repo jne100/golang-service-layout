@@ -20,10 +20,13 @@ type Params struct {
 	Cfg       config.InventoryConfig
 }
 
-func RegisterJobs(p Params) {
-	loc, _ := time.LoadLocation(p.Cfg.Cron.Timezone)
-	c := cron.New(cron.WithLocation(loc))
+func RegisterJobs(p Params) error {
+	loc, err := time.LoadLocation(p.Cfg.Cron.Timezone)
+	if err != nil {
+		return err
+	}
 
+	c := cron.New(cron.WithLocation(loc))
 	c.AddFunc(p.Cfg.Cron.PrintStats, func() {
 		zap.L().Info("print stats here...")
 	})
@@ -36,4 +39,6 @@ func RegisterJobs(p Params) {
 			return nil
 		},
 	})
+
+	return nil
 }

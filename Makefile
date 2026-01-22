@@ -31,7 +31,7 @@ generate-mocks:
 
 build:
 	mkdir -p bin/
-	go build -o bin/inventory ./cmd/main/
+	CGO_ENABLED=1 go build -o bin/inventory ./cmd/main/
 	@go test -run=none ./... >/dev/null
 
 test:
@@ -45,7 +45,7 @@ images:
 	docker build -f deployments/Dockerfile -t inventory:latest .
 
 examine:
-	docker run --rm -it --entrypoint /bin/bash inventory
+	docker run --rm -it --entrypoint /bin/sh inventory:latest
 
 up:
 	docker run -d \
@@ -53,7 +53,7 @@ up:
 		--restart unless-stopped \
 		-e CONFIG_PATH=/app/configs/inventory.prod.toml \
 		-p 50051:50051 \
-		inventory
+		inventory:latest
 
 down:
 	docker stop inventory-prod

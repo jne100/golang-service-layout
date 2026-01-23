@@ -2,7 +2,7 @@
 grpc_port = 50051
 
 [logging]
-verbosity = "info"
+level = "info"
 
 [db]
 driver = "sqlite3"

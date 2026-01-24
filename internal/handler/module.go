@@ -69,7 +69,7 @@ type RunHandlerParams struct {
 
 func RunHandlerAsync(p RunHandlerParams) {
 	go func() error {
-		grpcEndpoint := fmt.Sprintf("127.0.0.1:%d", p.Cfg.Inbound.GrpcPort)
+		grpcEndpoint := fmt.Sprintf("0.0.0.0:%d", p.Cfg.Inbound.GrpcPort)
 		l, err := net.Listen("tcp", grpcEndpoint)
 		if err != nil {
 			return err

@@ -31,11 +31,14 @@ generate-mocks:
 
 build:
 	mkdir -p bin/
-	CGO_ENABLED=1 go build -o bin/inventory ./cmd/main/
+	CGO_ENABLED=1 go build -o bin/inventory ./cmd/service/
 	@go test -run=none ./... >/dev/null
 
 test:
 	go test ./...
+
+run-client-demo:
+	go run ./cmd/clientdemo
 
 clean:
 	go clean ./...
